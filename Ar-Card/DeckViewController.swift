@@ -12,7 +12,7 @@ import ARKit
 class DeckViewController: UIViewController, ARSessionDelegate {
     @IBOutlet var sceneView: ARSCNView!
     
-    enum Card: String { case clubAce, club2, club3, club4, club5, club6, club7, club8, club9, club10, clubJack, clubQueen, clubKing }
+    enum Card: String { case clubAce, club2, club3, club4, club5, club6, club12, club8, club9, club10, clubJack, clubQueen, clubKing }
     
     override func viewDidLoad() {
         super.viewDidLoad()
