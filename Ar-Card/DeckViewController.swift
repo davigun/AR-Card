@@ -12,8 +12,6 @@ import ARKit
 class DeckViewController: UIViewController, ARSessionDelegate {
     @IBOutlet var sceneView: ARSCNView!
     
-    enum Card: String { case clubAce, club2, club3, club4, club5, club6, club7, club8, club9, club10, clubJack, clubQueen, clubKing }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -35,14 +33,9 @@ class DeckViewController: UIViewController, ARSessionDelegate {
         
         let triggerImages = ARReferenceImage.referenceImages(inGroupNamed: "deck", bundle: nil)!
         
-        // Image tracking
-        let configuration = ARImageTrackingConfiguration()
-        configuration.trackingImages = triggerImages
-        
-        //    // World tracking
-        //    let configuration = ARWorldTrackingConfiguration()
-        //    configuration.detectionImages = triggerImages
-        
+        let configuration = ARWorldTrackingConfiguration()
+        configuration.detectionImages = triggerImages
+    
         sceneView.session.run(configuration)
     }
     
@@ -58,14 +51,19 @@ extension DeckViewController : ARSCNViewDelegate {
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         if let imageAnchor = anchor as? ARImageAnchor {
             let overlayNode = createCardOverlayNode(for: imageAnchor)
-            let infoPanelNode = createInfoPanelNode(for: imageAnchor)
-            overlayNode.addChildNode(infoPanelNode)
+            // TO DO: add card info label
             return overlayNode
         }
-        
         return nil
     }
+    
+    func session(_ session: ARSession, didFailWithError error: Error) {
+        print(error)
+    }
 }
+
+
+
 
 extension DeckViewController {
     func createInfoPanelNode(for anchor: ARImageAnchor) -> SCNNode {
@@ -86,7 +84,7 @@ extension DeckViewController {
             label.text = cardName
             label.frame.size = labelSize
             label.textAlignment = .center
-            
+
             material.diffuse.contents = label
         }
         
@@ -121,7 +119,6 @@ extension DeckViewController {
             material.diffuse.contents = UIColor.red
             material.transparency = 0.3
         }
-        
         return SCNNode(geometry: box)
     }
 }
